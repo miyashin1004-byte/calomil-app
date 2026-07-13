@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カロミル - 毎日の食事管理</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="theme-color" content="#3cb371">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="カロミル">
+</head>
+<body>
+
+<div class="app">
+  <header class="app-header">
+    <div class="logo">🥗 カロミル</div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="today">今日の記録</button>
+      <button class="tab-btn" data-tab="history">履歴</button>
+      <button class="tab-btn" data-tab="weight">体重</button>
+      <button class="tab-btn" data-tab="settings">設定</button>
+    </nav>
+    <div class="streak-badge" id="streakBadge">🔥 継続0日</div>
+    <div class="date-nav">
+      <button id="prevDay">◀</button>
+      <span id="currentDateLabel">-</span>
+      <button id="nextDay">▶</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 今日の記録 -->
+    <section id="tab-today" class="tab-content active">
+      <div class="grid-today">
+
+        <div class="card summary-card">
+          <h2>カロリー収支</h2>
+          <div class="calorie-ring-wrap">
+            <canvas id="calorieRing" width="180" height="180"></canvas>
+            <div class="calorie-ring-center">
+              <div class="remain-label">残り</div>
+              <div class="remain-value" id="remainKcal">-</div>
+              <div class="remain-unit">kcal</div>
+            </div>
+          </div>
+          <div class="calorie-detail">
+            <div><span>目標</span><b id="targetKcal">-</b></div>
+            <div><span>摂取</span><b id="consumedKcal">-</b></div>
+            <div><span>運動</span><b id="exerciseKcal">-</b></div>
+          </div>
+        </div>
+
+        <div class="card pfc-card">
+          <h2>PFCバランス</h2>
+          <canvas id="pfcChart" width="180" height="180"></canvas>
+          <div class="pfc-legend">
+            <div class="legend-item"><span class="dot dot-p"></span>たんぱく質 <b id="pVal">-</b>g / <b id="pTarget">-</b>g</div>
+            <div class="legend-item"><span class="dot dot-f"></span>脂質 <b id="fVal">-</b>g / <b id="fTarget">-</b>g</div>
+            <div class="legend-item"><span class="dot dot-c"></span>炭水化物 <b id="cVal">-</b>g / <b id="cTarget">-</b>g</div>
+          </div>
+        </div>
+
+        <div class="card advice-card">
+          <h2>AI栄養士からの今日の診断</h2>
+          <div class="score-wrap">
+            <div class="score-circle" id="scoreCircle">-</div>
+            <div class="score-label">スコア</div>
+          </div>
+          <div class="mascot-row">
+            <div class="mascot-avatar">🥑</div>
+            <div class="mascot-bubble" id="mascotComment">-</div>
+          </div>
+          <ul id="adviceList" class="advice-list"></ul>
+        </div>
+
+        <div class="card nutrient-card">
+          <h2>くわしい栄養素バランス</h2>
+          <div id="nutrientBars"></div>
+        </div>
+
+        <div class="card exercise-card">
+          <h2>運動記録<span class="meal-kcal" id="exerciseTotalLabel"></span></h2>
+          <div id="exerciseList"></div>
+          <div class="exercise-input-row">
+            <input type="text" id="exerciseName" placeholder="運動内容(例: ウォーキング30分)">
+            <input type="number" id="exerciseKcalInput" placeholder="消費kcal">
+            <button id="addExerciseBtn" class="btn-primary">追加</button>
+          </div>
+        </div>
+
+        <div class="card meals-card">
+          <h2>食事記録</h2>
+          <div id="mealGroups"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 履歴 -->
+    <section id="tab-history" class="tab-content">
+      <div class="card">
+        <h2>過去の記録</h2>
+        <canvas id="historyChart" width="800" height="220"></canvas>
+        <table class="history-table">
+          <thead><tr><th>日付</th><th>摂取カロリー</th><th>目標比</th><th>状態</th></tr></thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 体重 -->
+    <section id="tab-weight" class="tab-content">
+      <div class="card">
+        <h2>体重の記録</h2>
+        <div class="weight-input-row">
+          <input type="number" id="weightInput" step="0.1" placeholder="今日の体重 (kg)">
+          <button id="addWeightBtn" class="btn-primary">記録する</button>
+        </div>
+        <canvas id="weightChart" width="800" height="240"></canvas>
+      </div>
+    </section>
+
+    <!-- 設定 -->
+    <section id="tab-settings" class="tab-content">
+      <div class="card settings-card">
+        <h2>プロフィール設定</h2>
+        <div class="form-grid">
+          <label>性別
+            <select id="setGender">
+              <option value="male">男性</option>
+              <option value="female">女性</option>
+            </select>
+          </label>
+          <label>年齢 <input type="number" id="setAge" value="30"></label>
+          <label>身長 (cm) <input type="number" id="setHeight" value="165"></label>
+          <label>現在の体重 (kg) <input type="number" id="setWeight" step="0.1" value="60"></label>
+          <label>目標体重 (kg) <input type="number" id="setTargetWeight" step="0.1" value="58"></label>
+          <label>活動レベル
+            <select id="setActivity">
+              <option value="1.2">低い(ほぼ座り仕事)</option>
+              <option value="1.375">普通(軽い運動あり)</option>
+              <option value="1.55">高い(よく運動する)</option>
+              <option value="1.725">非常に高い(激しい運動)</option>
+            </select>
+          </label>
+        </div>
+        <button id="saveSettingsBtn" class="btn-primary">保存する</button>
+        <p class="settings-note">目標カロリー・PFCバランスはプロフィールから自動計算されます。</p>
+      </div>
+
+      <div class="card settings-card">
+        <h2>写真解析(AI)設定</h2>
+        <div class="form-grid">
+          <label>Anthropic APIキー
+            <input type="password" id="setApiKey" placeholder="sk-ant-...">
+          </label>
+          <label>解析モデル
+            <select id="setApiModel">
+              <option value="claude-opus-4-8">Claude Opus 4.8(最も高精度・高コスト)</option>
+              <option value="claude-sonnet-5">Claude Sonnet 5(バランス型)</option>
+              <option value="claude-haiku-4-5">Claude Haiku 4.5(高速・低コスト)</option>
+            </select>
+          </label>
+        </div>
+        <button id="saveApiSettingsBtn" class="btn-primary">APIキーを保存する</button>
+        <p class="settings-note">
+          APIキーはこの端末のブラウザ内(localStorage)にのみ保存され、写真解析の際に直接Anthropic APIへ送信されます。
+          ブラウザから直接APIキーを使うため、共有PCや公開ページでは使わないでください。
+          キーは <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic Console</a> で発行できます。
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 食事追加モーダル -->
+<div id="addMealModal" class="modal-overlay">
+  <div class="modal">
+    <h3>食事を追加 <span id="modalMealType"></span></h3>
+
+    <button id="photoAddBtn" class="btn-primary photo-btn">📷 写真から記録する(AI解析)</button>
+    <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none">
+    <div id="photoStatus" class="photo-status"></div>
+
+    <hr>
+    <input type="text" id="foodSearchInput" placeholder="食品名で検索...">
+    <div id="foodSearchResults" class="food-results"></div>
+    <hr>
+    <p class="or-label">または手入力</p>
+    <div class="manual-form">
+      <input type="text" id="manualName" placeholder="食品名">
+      <input type="number" id="manualKcal" placeholder="カロリー(kcal)">
+      <input type="number" id="manualP" placeholder="P(g)">
+      <input type="number" id="manualF" placeholder="F(g)">
+      <input type="number" id="manualC" placeholder="C(g)">
+      <input type="number" id="manualSalt" placeholder="塩分(g)(任意)">
+      <input type="number" id="manualFiber" placeholder="食物繊維(g)(任意)">
+      <input type="number" id="manualSugar" placeholder="糖分(g)(任意)">
+      <button id="manualAddBtn" class="btn-primary">追加</button>
+    </div>
+    <button id="closeModalBtn" class="btn-secondary">閉じる</button>
+  </div>
+</div>
+
+<script src="foods.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -18,7 +18,8 @@
 canvas { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 
 html, body {
-  overflow-x: hidden;
+  overflow-x: visible;
+  overscroll-behavior-x: none;
   max-width: 100%;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

@@ -102,12 +102,12 @@ body {
 
 .grid-today {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
 }
 .meals-card, .advice-card { grid-column: span 1; }
 @media (max-width: 800px) {
-  .grid-today { grid-template-columns: 1fr; }
+  .grid-today { grid-template-columns: minmax(0, 1fr); }
 }
 
 .summary-card, .pfc-card { text-align: center; }
@@ -170,6 +170,7 @@ body {
   font-size: 13px;
   line-height: 1.5;
   flex: 1;
+  min-width: 0;
 }
 .mascot-bubble::before {
   content: "";
@@ -193,6 +194,7 @@ body {
 .nutrient-bar-fill.over { background: var(--red); }
 
 .exercise-input-row { display: flex; gap: 8px; margin-top: 10px; }
+.exercise-input-row input { min-width: 0; }
 .exercise-input-row input:first-child { flex: 2; }
 .exercise-input-row input:last-of-type { flex: 1; }
 .exercise-item {
@@ -222,7 +224,7 @@ body {
   border-bottom: 1px solid var(--border);
   font-size: 14px;
 }
-.food-item .food-name { flex: 1; }
+.food-item .food-name { flex: 1; min-width: 0; }
 .food-item .food-kcal { color: var(--text-sub); margin-right: 10px; }
 .food-item .remove-btn {
   border: none; background: transparent; color: var(--red); cursor: pointer; font-size: 14px;
@@ -260,12 +262,13 @@ body {
 .weight-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
 .weight-input-row input {
   flex: 1;
+  min-width: 0;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--border);
 }
 
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
 .form-grid label { display: flex; flex-direction: column; font-size: 13px; color: var(--text-sub); gap: 6px; min-width: 0; }
 .form-grid input, .form-grid select {
   width: 100%;
@@ -274,7 +277,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .form-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
 }
 .settings-note { font-size: 12px; color: var(--text-sub); margin-top: 10px; }
 

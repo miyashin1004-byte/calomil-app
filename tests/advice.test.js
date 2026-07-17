@@ -41,4 +41,34 @@ describe("computeAdvice", () => {
     const result = computeAdvice(totals, targets, 7);
     expect(result.mascotComment).toContain("7日連続の記録");
   });
+
+  it("カロリーが大きく不足している日はエネルギー不足の警告が付く", () => {
+    const totals = { kcal: 700, p: 30, f: 15, c: 100, salt: 3, fiber: 10, sugar: 10 };
+    const result = computeAdvice(totals, targets, 0);
+    expect(result.score).toBe(44);
+    expect(result.messages).toEqual([
+      { text: "エネルギーが不足気味です。しっかり食べましょう。", level: "warn" },
+      { text: "たんぱく質が不足しています。肉・魚・卵・大豆製品を追加しましょう。", level: "warn" },
+      { text: "食物繊維が不足気味です。野菜・きのこ・海藻を増やしてみましょう。", level: "warn" },
+    ]);
+  });
+
+  it("カロリーは適正でも炭水化物だけが多い日は炭水化物の警告が付く", () => {
+    const totals = { kcal: 1300, p: 20, f: 20, c: 260, salt: 5, fiber: 15, sugar: 20 };
+    const result = computeAdvice(totals, targets, 0);
+    expect(result.score).toBe(65);
+    expect(result.messages).toEqual([
+      { text: "カロリーは適正範囲におさまっています。", level: "good" },
+      { text: "たんぱく質が不足しています。肉・魚・卵・大豆製品を追加しましょう。", level: "warn" },
+      { text: "炭水化物が多めです。ご飯や麺の量を見直しましょう。", level: "warn" },
+    ]);
+  });
+
+  it("連続記録日数が3〜6日だとマスコットコメントに継続をたたえる一言が付く(7日以上とは別の文言)", () => {
+    const totals = { kcal: 1365, p: 61, f: 38, c: 195, salt: 6.5, fiber: 18, sugar: 20 };
+    const result = computeAdvice(totals, targets, 5);
+    expect(result.mascotComment).toBe(
+      "とってもバランスの良い食事ができていますね!すごく良い調子です✨ 5日連続で記録できていますね。続けることが一番大切です!"
+    );
+  });
 });

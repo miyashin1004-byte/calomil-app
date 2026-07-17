@@ -47,6 +47,13 @@ describe("食事記録", () => {
     const all = await getAllMealDays();
     expect(Object.keys(all)).toEqual(["2026-07-16"]);
   });
+
+  it("その日の記録を全部削除すると、日付のキー自体もgetAllMealDaysから消える", async () => {
+    await addMealEntry("2026-07-15", "breakfast", { name: "卵", kcal: 91, p: 7.4, f: 6.2, c: 0.2, salt: 0.2, fiber: 0, sugar: 0.2 });
+    await removeMealEntry("2026-07-15", "breakfast", 0);
+    const all = await getAllMealDays();
+    expect(Object.keys(all)).not.toContain("2026-07-15");
+  });
 });
 
 describe("API設定", () => {

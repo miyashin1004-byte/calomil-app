@@ -46,6 +46,11 @@ export async function removeMealEntry(dateKeyStr, mealType, index) {
   const all = loadAllMeals();
   if (!all[dateKeyStr]) return;
   all[dateKeyStr][mealType].splice(index, 1);
+  const day = all[dateKeyStr];
+  const isEmpty = ["breakfast", "lunch", "dinner", "snack"].every(mk => day[mk].length === 0);
+  if (isEmpty) {
+    delete all[dateKeyStr];
+  }
   saveAllMeals(all);
 }
 

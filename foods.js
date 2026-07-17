@@ -1,7 +1,7 @@
 // 食品データベース(1食分の目安量あたりの栄養価)
 // kcal: カロリー, p: たんぱく質(g), f: 脂質(g), c: 炭水化物(g)
 // salt: 塩分相当量(g), fiber: 食物繊維(g), sugar: 糖質・糖分(g)
-const FOOD_DB = [
+export const FOOD_DB = [
   // 主食
   { name: "ご飯(茶碗1杯 150g)", category: "主食", kcal: 252, p: 3.8, f: 0.5, c: 55.7, salt: 0, fiber: 0.5, sugar: 0.3 },
   { name: "食パン(6枚切り1枚)", category: "主食", kcal: 149, p: 5.3, f: 2.6, c: 26.6, salt: 0.7, fiber: 1.2, sugar: 2.0 },

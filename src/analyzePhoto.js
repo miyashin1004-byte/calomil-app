@@ -73,5 +73,9 @@ export async function analyzeFoodPhoto(file, { apiKey, model, fetchImpl = fetch 
   }
   const textBlock = data.content.find(b => b.type === "text");
   if (!textBlock) throw new Error("解析結果を読み取れませんでした。");
-  return JSON.parse(textBlock.text);
+  try {
+    return JSON.parse(textBlock.text);
+  } catch (e) {
+    throw new Error("解析結果を正しく読み取れませんでした。もう一度試してください。");
+  }
 }

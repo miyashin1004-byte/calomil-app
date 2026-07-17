@@ -44,4 +44,18 @@ describe("analyzeFoodPhoto", () => {
       analyzeFoodPhoto(makeFakeImageFile(), { apiKey: "sk-ant-bad", model: "claude-opus-4-8", fetchImpl })
     ).rejects.toThrow("API エラー (401)");
   });
+
+  it("AIの返事が壊れたJSONの場合は分かりやすいエラーを投げる", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        stop_reason: "end_turn",
+        content: [{ type: "text", text: "これはJSONではありません" }],
+      }),
+    });
+
+    await expect(
+      analyzeFoodPhoto(makeFakeImageFile(), { apiKey: "sk-ant-test", model: "claude-opus-4-8", fetchImpl })
+    ).rejects.toThrow("解析結果を正しく読み取れませんでした。もう一度試してください。");
+  });
 });

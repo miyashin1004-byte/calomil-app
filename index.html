@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>カロミル - 毎日の食事管理</title>
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -22,7 +22,6 @@
     <nav class="tabs">
       <button class="tab-btn active" data-tab="today">今日の記録</button>
       <button class="tab-btn" data-tab="history">履歴</button>
-      <button class="tab-btn" data-tab="weight">体重</button>
       <button class="tab-btn" data-tab="settings">設定</button>
     </nav>
     <div class="streak-badge" id="streakBadge">🔥 継続0日</div>
@@ -51,7 +50,6 @@
           <div class="calorie-detail">
             <div><span>目標</span><b id="targetKcal">-</b></div>
             <div><span>摂取</span><b id="consumedKcal">-</b></div>
-            <div><span>運動</span><b id="exerciseKcal">-</b></div>
           </div>
         </div>
 
@@ -83,16 +81,6 @@
           <div id="nutrientBars"></div>
         </div>
 
-        <div class="card exercise-card">
-          <h2>運動記録<span class="meal-kcal" id="exerciseTotalLabel"></span></h2>
-          <div id="exerciseList"></div>
-          <div class="exercise-input-row">
-            <input type="text" id="exerciseName" placeholder="運動内容(例: ウォーキング30分)">
-            <input type="number" id="exerciseKcalInput" placeholder="消費kcal">
-            <button id="addExerciseBtn" class="btn-primary">追加</button>
-          </div>
-        </div>
-
         <div class="card meals-card">
           <h2>食事記録</h2>
           <div id="mealGroups"></div>
@@ -110,18 +98,6 @@
           <thead><tr><th>日付</th><th>摂取カロリー</th><th>目標比</th><th>状態</th></tr></thead>
           <tbody id="historyTableBody"></tbody>
         </table>
-      </div>
-    </section>
-
-    <!-- 体重 -->
-    <section id="tab-weight" class="tab-content">
-      <div class="card">
-        <h2>体重の記録</h2>
-        <div class="weight-input-row">
-          <input type="number" id="weightInput" step="0.1" placeholder="今日の体重 (kg)">
-          <button id="addWeightBtn" class="btn-primary">記録する</button>
-        </div>
-        <canvas id="weightChart" width="800" height="240"></canvas>
       </div>
     </section>
 
@@ -191,7 +167,7 @@
     <input type="text" id="foodSearchInput" placeholder="食品名で検索...">
     <div id="foodSearchResults" class="food-results"></div>
     <hr>
-    <p class="or-label">または手入力</p>
+    <p class="or-label">または手入力(写真解析の結果もここに表示され、確認・修正できます)</p>
     <div class="manual-form">
       <input type="text" id="manualName" placeholder="食品名">
       <input type="number" id="manualKcal" placeholder="カロリー(kcal)">
@@ -207,7 +183,6 @@
   </div>
 </div>
 
-<script src="foods.js"></script>
-<script src="app.js"></script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>

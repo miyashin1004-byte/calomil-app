@@ -193,15 +193,6 @@ body {
 .nutrient-bar-fill { height: 100%; background: var(--green); border-radius: 6px; }
 .nutrient-bar-fill.over { background: var(--red); }
 
-.exercise-input-row { display: flex; gap: 8px; margin-top: 10px; }
-.exercise-input-row input { min-width: 0; }
-.exercise-input-row input:first-child { flex: 2; }
-.exercise-input-row input:last-of-type { flex: 1; }
-.exercise-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 6px 10px; border-bottom: 1px solid var(--border); font-size: 14px;
-}
-.exercise-item .remove-btn { border: none; background: transparent; color: var(--red); cursor: pointer; }
 
 .meal-group { margin-bottom: 16px; }
 .meal-group-header {
@@ -259,14 +250,6 @@ body {
 .badge.warn { background: var(--orange); }
 .badge.bad { background: var(--red); }
 
-.weight-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
-.weight-input-row input {
-  flex: 1;
-  min-width: 0;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
 
 .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
 .form-grid label { display: flex; flex-direction: column; font-size: 13px; color: var(--text-sub); gap: 6px; min-width: 0; }
